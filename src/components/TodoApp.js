@@ -1,29 +1,21 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Header from "./layout/Header";
 import Todos from "./Todos";
 import AddTodo from "./AddTodo";
 import { v4 as uuidv4 } from "uuid";
+import axios from "axios";
 
 function TodoApp() {
-	const [todos, setTodos] = useState([
-		{
-			id: uuidv4(),
-			title: "Setup Development environment",
-			completed: true,
-		},
-		{
-			id: uuidv4(),
-			title: "Develop website and add content",
-			completed: false,
-		},
-		{
-			id: uuidv4(),
-			title: "Deploy to live server",
-			completed: false,
-		},
-	]);
-	// console.log(todos);
+	// const API = "https://jsonplaceholder.typicode.com/todos?_limit=10";
+	const [todos, setTodos] = useState([]);
+
+	// fetch data from rest API
+	useEffect(() => {
+		axios
+			.get("http://localhost:5000/todos")
+			.then((res) => setTodos(res.data));
+	}, []);
 
 	// change the state of checkbox
 	const handleChange = (id) => {
@@ -36,17 +28,18 @@ function TodoApp() {
 
 	// delete item
 	const deleteItem = (id) => {
-		setTodos(todos.filter((todo) => todo.id !== id));
+		axios
+			.delete(`http://localhost:5000/todos/${id}`)
+			.then((res) => setTodos(todos.filter((todo) => todo.id !== id)));
 	};
 	// add task
 	const addTodo = (title) => {
-		const newTask = {
-			id: uuidv4(),
-			title: title,
-			completed: false,
-		};
-
-		setTodos([...todos, newTask]);
+		axios
+			.post("http://localhost:5000/todos", {
+				title: title,
+				completed: false,
+			})
+			.then((res) => setTodos([...todos, res.data]));
 	};
 
 	return (
