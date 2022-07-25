@@ -3,12 +3,12 @@ import { useState, useEffect } from "react";
 import Header from "./layout/Header";
 import Todos from "./Todos";
 import AddTodo from "./AddTodo";
-import { v4 as uuidv4 } from "uuid";
 import axios from "axios";
 
 function TodoApp() {
 	// const API = "https://jsonplaceholder.typicode.com/todos?_limit=10";
 	const [todos, setTodos] = useState([]);
+	// const [show, setShow] = useState(false);
 
 	// fetch data from rest API
 	useEffect(() => {
